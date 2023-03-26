@@ -1,0 +1,27 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 10px;
+  font-family: 'Lato', 'sans-serif';
+  color: var(--default-text-color);
+}
+
+:root {
+  /* Colors */
+  --white-layer: rgba(255, 255, 255, 0.7);
+  --page-content-background: #fff;
+  --page-background: rgba(184, 207, 219, 0.7);
+  --row-background: rgba(244, 246, 250);
+  --color-blue: #1c1566;
+  --default-text-color: #212427;
+  --light-text-color: #a1aab5;
+  --default-button-color: rgb(25, 96, 234);
+  --default-button-hover-color: #3a7cff;
+  --light-gray: rgb(240, 247, 247);
+
+  /* Elements text size */
+  --input-label: 1.2rem;
+}

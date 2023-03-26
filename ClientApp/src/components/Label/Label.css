@@ -1,0 +1,9 @@
+.label-container {
+  width: 7rem;
+  height: 2.2rem;
+  border-radius: 30px;
+  border-width: 2px;
+  border-style: solid;
+  font-weight: 400;
+  text-align: center;
+}

@@ -1,0 +1,15 @@
+.page-wrapper {
+  width: 90%;
+  margin: 0 auto;
+  border-radius: 1rem;
+  padding: 2rem 1rem;
+  box-shadow: 0 0 10px gray;
+  background-color: var(--page-content-background);
+  max-width: 100rem;
+}
+
+@media screen and (min-width: 600px) {
+  .page-wrapper {
+    padding: 2rem 3rem;
+  }
+}

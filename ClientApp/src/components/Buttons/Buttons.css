@@ -1,0 +1,20 @@
+.button {
+  border: none;
+  background-color: var(--default-button-color);
+  color: white;
+  border-radius: 8px;
+  box-shadow: 0 0 5px gray;
+  min-width: 20rem;
+  min-height: 4rem;
+  margin-bottom: 20px;
+  padding: 1rem 2rem;
+  font-size: 1.6rem;
+  font-weight: 200;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.button:hover {
+  background-color: var(--default-button-hover-color);
+  box-shadow: 0 0 10px gray;
+}

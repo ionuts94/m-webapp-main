@@ -1,0 +1,33 @@
+.spinner-layer {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--white-layer);
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.spinner-layer .spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 4px solid;
+  border-top-color: var(--color-blue);
+  border-right-color: var(--color-blue);
+  border-bottom-color: var(--color-blue);
+  border-left-color: transparent;
+  animation: spin 1s ease-in infinite;
+  border-radius: 50%;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

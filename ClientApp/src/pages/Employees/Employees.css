@@ -1,0 +1,32 @@
+.employees-page {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--page-background);
+  margin-top: 0 !important;
+}
+
+.page-header .text-container {
+  margin-bottom: 2rem;
+}
+
+.page-header .text-container h1 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.page-header .text-container p {
+  font-size: 1.4rem;
+  color: var(--light-text-color)
+}
+
+.edit-button {
+  cursor: pointer;
+}
+
+@media screen and (min-width: 600px) {
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
