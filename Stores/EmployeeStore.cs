@@ -23,7 +23,7 @@ namespace InterviewTest.Stores
         connection.Open();
 
         var queryCmd = connection.CreateCommand();
-        queryCmd.CommandText = @"SELECT Id, Name, Value FROM Employees";
+        queryCmd.CommandText = @"SELECT Id, Name, Value, Department, Status, Photo FROM Employees";
         using (var reader = queryCmd.ExecuteReader())
         {
           while (reader.Read())
@@ -33,7 +33,9 @@ namespace InterviewTest.Stores
               Id = reader.GetInt32(0),
               Name = reader.GetString(1),
               Value = reader.GetInt32(2),
-
+              Department = reader.GetInt32(3),
+              Status = reader.GetInt32(4),
+              Photo = reader.GetString(5)
             });
           }
         }
@@ -51,7 +53,7 @@ namespace InterviewTest.Stores
         connection.Open();
 
         var queryCmd = connection.CreateCommand();
-        queryCmd.CommandText = @"SELECT Id, Name, Value FROM Employees WHERE Id = @id";
+        queryCmd.CommandText = @"SELECT Id, Name, Value, Department, Status, Photo FROM Employees WHERE Id = @id";
         queryCmd.Parameters.AddWithValue("@id", id);
 
         using (var reader = queryCmd.ExecuteReader())
@@ -62,7 +64,10 @@ namespace InterviewTest.Stores
             {
               Id = reader.GetInt32(0),
               Name = reader.GetString(1),
-              Value = reader.GetInt32(2)
+              Value = reader.GetInt32(2),
+              Department = reader.GetInt32(3),
+              Status = reader.GetInt32(4),
+              Photo = reader.GetString(5)
             };
           }
         }

@@ -2,28 +2,37 @@ import React from 'react';
 import { Label, Spinner, PageWrapper, AddEmployeeButton, Table, DisplayError } from 'components';
 import { MdModeEditOutline } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
-import { useFetchEmployees } from 'hooks';
+import { useFetchEndpoint } from 'hooks';
 import './Employees.css';
 
-const ENDPOINT = 'employees';
+const EMPLOYEES_ENDPOINT = 'employees';
+const DEPARTMENTS_ENDPOINT = 'departments';
+const DEFAULT_PROFILE_PICTURE = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
 
 export function Employees() {
   const navigate = useNavigate();
-  const { data, loading, error } = useFetchEmployees(ENDPOINT);
+  const {
+    data: departmentsData,
+    loading: departmentsLoading,
+    error: departmentsError
+  } = useFetchEndpoint(DEPARTMENTS_ENDPOINT);
+  const { data, loading, error } = useFetchEndpoint(EMPLOYEES_ENDPOINT);
 
   function editProfile(id) {
     navigate(`/profile/${id}`);
   }
 
-  console.log(data);
+  function getDepartmentById(departmentId) {
+    return departmentsData.find(el => el.id === departmentId)
+  }
 
-  if (loading) {
+  if (loading || departmentsLoading) {
     return <Spinner />
   }
 
-  if (error) {
+  if (error || departmentsError) {
     return <DisplayError
-      error={error.toString()}
+      error={error.toString() || departmentsError.toString()}
       redirectTo="/"
     />
   }
@@ -48,6 +57,7 @@ export function Employees() {
               <Table.Header>ID</Table.Header>
               <Table.Header>Employee</Table.Header>
               <Table.Header hideOnMobile>Department</Table.Header>
+              <Table.Header hideOnMobile>Location</Table.Header>
               <Table.Header>Status</Table.Header>
               <Table.Header>Edit</Table.Header>
             </Table.Row>
@@ -65,7 +75,7 @@ export function Employees() {
                     {/* TODO - Extract this div into its own component */}
                     {employee.picture ||
                       <img
-                        src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                        src={DEFAULT_PROFILE_PICTURE}
                         alt="default-avatar"
                         style={{ height: 40, width: 40, borderRadius: '50%' }}
                       />
@@ -75,7 +85,11 @@ export function Employees() {
                 </Table.Data>
 
                 <Table.Data hideOnMobile>
-                  {employee.department || "N/A"}
+                  {getDepartmentById(employee.department)?.name || "N/A"}
+                </Table.Data>
+
+                <Table.Data hideOnMobile>
+                  {getDepartmentById(employee.department)?.location || "N/A"}
                 </Table.Data>
 
                 <Table.Data>
