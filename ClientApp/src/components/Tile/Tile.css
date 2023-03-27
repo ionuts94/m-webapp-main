@@ -1,0 +1,37 @@
+.tile {
+  width: 100%;
+  max-width: 400px;
+  height: 50%;
+  max-height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 2rem;
+  border: 2px solid var(--default-button-color);
+  box-shadow: 0 0 5px;
+  cursor: pointer;
+  background-color: white;
+  transition: all 0.3s;
+}
+
+.tile:hover {
+  background-color: var(--default-button-color);
+  color: white;
+  transform: scale(1.03);
+}
+
+.tile h1 {
+  font-size: 2.2rem;
+}
+
+.tile svg {
+  font-size: 10rem;
+}
+
+.tile span {
+  font-size: 1.4rem;
+  color: var(--default-text-color);
+  opacity: 0.4;
+  font-style: italic;
+}

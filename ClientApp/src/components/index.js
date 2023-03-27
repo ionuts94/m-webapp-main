@@ -7,3 +7,4 @@ export { Avatar } from './Avatar/Avatar';
 export { Table } from './Table/Table';
 export { Label } from './Label/Label';
 export { Input } from './Input/Input';
+export { Tile } from './Tile/Tile';
