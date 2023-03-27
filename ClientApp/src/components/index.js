@@ -8,3 +8,4 @@ export { Table } from './Table/Table';
 export { Label } from './Label/Label';
 export { Input } from './Input/Input';
 export { Tile } from './Tile/Tile';
+export { Back } from './Back/Back';

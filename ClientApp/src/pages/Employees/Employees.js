@@ -50,6 +50,7 @@ export function Employees() {
       <PageHeader
         color={DEFAULT_PAGE_HEADER_COLOR}
         textColor={DEFAULT_PAGE_HEADER_TEXT_COLOR}
+        backTo='/'
       >
         {VIEW_EMPLOYEES_PAGE}
       </PageHeader>

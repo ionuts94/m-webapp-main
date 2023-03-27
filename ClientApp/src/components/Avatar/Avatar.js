@@ -7,8 +7,8 @@ export function Avatar({ name, photoUrl }) {
     <div className='avatar-container'>
       <img
         src={photoUrl || DEFAULT_PROFILE_PICTURE}
-        alt="default-avatar"
-        style={{ height: 40, width: 40, borderRadius: '50%' }}
+        className='avatar-picture'
+        alt='default-avatar'
       />
       {name}
     </div>

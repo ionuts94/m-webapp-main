@@ -196,8 +196,9 @@ export function Profile({ actionType = 'PUT' }) {
       <PageHeader
         color={DEFAULT_PAGE_HEADER_COLOR}
         textColor={DEFAULT_PAGE_HEADER_TEXT_COLOR}
+        backTo="/view-employees"
       >
-        {actionType === 'update'
+        {actionType === 'PUT'
           ? EDIT_PROFILE_PAGE
           : ADD_EMPLOYEE_PAGE
         }
