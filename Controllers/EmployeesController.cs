@@ -48,12 +48,10 @@ namespace InterviewTest.Controllers
     }
 
     [HttpDelete("/delete-employee")]
-    public bool DeleteEmployee([FromBody] int id)
+    public bool DeleteEmployee([FromBody] Employee employee)
     {
-      var done = store.DeleteEmployee(id);
+      var done = store.DeleteEmployee(employee.Id);
       return done;
     }
-
-    // TODO: Update & Add
   }
 }
