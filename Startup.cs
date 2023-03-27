@@ -33,6 +33,7 @@ namespace InterviewTest
       // Inject employee store
       services.AddScoped<IEmployeeStore, EmployeeStore>();
       services.AddScoped<IDepartmentStore, DepartmentStore>();
+      services.AddScoped<IStatusStore, StatusStore>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,23 +1,95 @@
 import React, { useState, useEffect } from 'react';
-import { PageWrapper, Input, PageHeader } from 'components';
-import { useFetchEmployee } from 'hooks';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import {
+  STATUS_ENDPOINT,
+  EMPLOYEES_ENDPOINT,
+  DEPARTMENTS_ENDPOINT,
+  DEFAULT_PROFILE_PICTURE,
+  EMPLOYEE_ACTIONS_ENDPOINTS,
+  EDIT_PROFILE_PAGE,
+  ADD_EMPLOYEE_PAGE,
+  DEFAULT_PAGE_HEADER_COLOR,
+  DEFAULT_PAGE_HEADER_TEXT_COLOR
+} from 'constants';
+import {
+  Input,
+  Spinner,
+  PageHeader,
+  SaveButton,
+  PageWrapper,
+  DeleteButton,
+  DisplayError,
+  AddButton
+} from 'components';
+import {
+  useEmployeeActions,
+  useFetchEndpoint
+} from 'hooks';
 import './Profile.css';
 
-const ENDPOINT = 'employees';
-const DEFAULT_PROFILE_PHOTO = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
-
-export function Profile() {
+// This component is used as a page - Edit profile page
+// But it is also used as a component - Add employee page
+export function Profile({ actionType = 'PUT' }) {
   const { id } = useParams();
-  const { data, loading, error } = useFetchEmployee(`${ENDPOINT}/${id}`);
+  const navigate = useNavigate();
+
+  // This is used to differentiate the endpoint for when the form is submitted
+  // Based on the action type. Current action types: POST , PUT, DELETE
+  const endpoint = EMPLOYEE_ACTIONS_ENDPOINTS[actionType];
+
+  // In case there's an ID passed in the route param
+  // We know this is used for Edit Profile page 
+  // Therefore we fetch employee data to prefill the form
+  const {
+    data,
+    loading,
+    error
+  } = useFetchEndpoint(id && `${EMPLOYEES_ENDPOINT}/${id}` || null);
+
+  const {
+    data: departmentsData,
+    loading: departmentsLoading,
+    error: departmentsError
+  } = useFetchEndpoint(DEPARTMENTS_ENDPOINT);
+
+  const {
+    data: statusData,
+    loading: statusLoading,
+    error: statusError
+  } = useFetchEndpoint(STATUS_ENDPOINT);
+
+  const {
+    loading: employeePostLoading,
+    error: employeePostError,
+    handleEmployeeAction
+  } = useEmployeeActions();
+
+  // profileData is the actuall data that will be passed
+  // when calling the api
   const [profileData, setProfileData] = useState({})
-  console.log(profileData);
 
   useEffect(() => {
-    if (data) {
+    if (data && !Array.isArray(data)) {
       setProfileData(data);
     }
   }, [data])
+
+  // This is used when this component is used to add an employee
+  // As there will be no pre-fill because 
+  // there's no data we pulled from database for this profile
+  // we will set department and status by default
+  useEffect(() => {
+    if (actionType === 'POST') {
+      if (!profileData.department) {
+        setProfileData(profileData =>
+          ({ ...profileData, department: departmentsData[0]?.id }))
+      }
+      if (!profileData.status) {
+        setProfileData(profileData =>
+          ({ ...profileData, status: statusData[0]?.id }))
+      }
+    }
+  }, [departmentsData, statusData])
 
   function handleInputChange(e) {
     setProfileData(profileData => ({
@@ -26,24 +98,79 @@ export function Profile() {
     }))
   }
 
+  async function handleSubmitForm(e) {
+    e.preventDefault();
+    const done = await handleEmployeeAction(endpoint, profileData, actionType);
+    if (done && actionType === 'POST') {
+      redirectToEmployeesList();
+    }
+  }
+
+  async function handleDeleteEmployee(e) {
+    const actionType = 'DELETE';
+    const endpoint = EMPLOYEE_ACTIONS_ENDPOINTS[actionType];
+    e.preventDefault();
+    const done = await handleEmployeeAction(endpoint, profileData, actionType);
+    if (done) {
+      redirectToEmployeesList();
+    }
+  }
+
+  function redirectToEmployeesList() {
+    setTimeout(() => navigate('/view-employees'), 500)
+  }
+
+  // If any of those hooks are currently awaiting for response
+  // We show Spinner component
+  function componentIsLoading() {
+    return loading || departmentsLoading || statusLoading || employeePostLoading
+  }
+
+  // If any of those hooks failed their request
+  // We show DisplayError component
+  function componentHasErrors() {
+    return error || departmentsError || statusError || employeePostError
+  }
+
+  if (componentIsLoading()) {
+    return <Spinner />
+  }
+
+  if (componentHasErrors()) {
+    return <DisplayError
+      error={error.toString()}
+      redirectTo="/"
+    />
+  }
+
   return (
     <section className='profile-page'>
-      <PageHeader color="#008CC9" textColor="#fff">EDIT PROFILE</PageHeader>
+      <PageHeader
+        color={DEFAULT_PAGE_HEADER_COLOR}
+        textColor={DEFAULT_PAGE_HEADER_TEXT_COLOR}
+      >
+        {actionType === 'update'
+          ? EDIT_PROFILE_PAGE
+          : ADD_EMPLOYEE_PAGE
+        }
+      </PageHeader>
+
       <PageWrapper>
-        <form>
-          <div className='profile-picture-container'>
+        <form onSubmit={handleSubmitForm}>
+          <div className='profile-form-container'>
             <h2 className='profile-picture-header'>Prfile photo</h2>
 
             <img
               className="profile-picture"
-              src={profileData?.profilePhoto || data?.profilePhoto || DEFAULT_PROFILE_PHOTO}
+              src={profileData?.photo || data?.photo || DEFAULT_PROFILE_PICTURE}
               alt='profile photo'
             />
+
             <Input
-              name="profilePhoto"
+              name="photo"
               label="Photo Url"
               onChange={handleInputChange}
-              value={profileData.profilePhoto}
+              value={profileData.photo}
             />
 
             <Input
@@ -51,6 +178,7 @@ export function Profile() {
               label="Name"
               onChange={handleInputChange}
               value={profileData.name}
+              required
             />
 
             <Input
@@ -59,9 +187,17 @@ export function Profile() {
               label="Department"
               onChange={handleInputChange}
               value={profileData.department}
+              required
             >
-              <option name="hr" value="hr">HR</option>
-              <option name="it" value="it">IT</option>
+              {departmentsData.map(department => (
+                <option
+                  key={department.id}
+                  name={department.name}
+                  value={department.id}
+                >
+                  {department.name}
+                </option>
+              ))}
             </Input>
 
             <Input
@@ -70,11 +206,37 @@ export function Profile() {
               label="Status"
               onChange={handleInputChange}
               value={profileData.status}
+              required
             >
-              <option name="active" value="active">active</option>
-              <option name="inactive" value="inactive">inactive</option>
-              <option name="holiday" value="holiday">holiday</option>
+              {statusData.map(status => (
+                <option
+                  key={status.id}
+                  name={status.name}
+                  value={status.id}
+                >
+                  {status.name}
+                </option>
+              ))}
             </Input>
+
+            <div className='buttons-container'>
+              {actionType === 'PUT'
+                ? <>
+                  <SaveButton>
+                    Save Details
+                  </SaveButton>
+                  <DeleteButton
+                    type='button'
+                    onClick={handleDeleteEmployee}
+                  >
+                    Delete Entry
+                  </DeleteButton>
+                </>
+                : <AddButton>
+                  Add Employee
+                </AddButton>
+              }
+            </div>
 
           </div>
         </form>

@@ -18,3 +18,21 @@
   background-color: var(--default-button-hover-color);
   box-shadow: 0 0 10px gray;
 }
+
+.save-btn {
+  background-color: var(--save-btn);
+}
+
+.save-btn:hover {
+  background-color: var(--save-btn-hover);
+  box-shadow: 0 0 10px gray;
+}
+
+.delete-btn {
+  background-color: var(--delete-btn);
+}
+
+.delete-btn:hover {
+  background-color: var(--delete-btn-hover);
+  box-shadow: 0 0 10px gray;
+}

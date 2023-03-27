@@ -2,6 +2,9 @@ import React from 'react';
 import { v4 as uuid } from 'uuid';
 import './Input.css';
 
+// Polymorph component
+// It groups a label with any type of inputs
+// Mostly used as input and select
 export function Input({
   id = uuid(),
   onChange = () => null,
@@ -12,6 +15,7 @@ export function Input({
   label = "",
   as = "input",
   children,
+  required,
   ...rest
 }) {
   const Componet = as;
@@ -22,7 +26,7 @@ export function Input({
         className='input-label'
         htmlFor={id}
       >
-        {label}
+        {label}{required && <span> *</span>}
       </label>
       <Componet
         id={id}
@@ -31,6 +35,7 @@ export function Input({
         value={value}
         name={name}
         onChange={onChange}
+        {...rest}
       >
         {children}
       </Componet>

@@ -21,6 +21,10 @@ html {
   --default-button-color: rgb(25, 96, 234);
   --default-button-hover-color: #3a7cff;
   --light-gray: rgb(240, 247, 247);
+  --save-btn: #f7d05a;
+  --save-btn-hover: #f2be23;
+  --delete-btn: #f33737;
+  --delete-btn-hover: #d70c0c;
 
   /* Elements text size */
   --input-label: 1.2rem;

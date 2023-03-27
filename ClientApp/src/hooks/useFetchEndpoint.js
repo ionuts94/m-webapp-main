@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react'
 
+// The above hook is used as a generic fetcher
 export function useFetchEndpoint(endpoint) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [error, setError] = useState();
 
   useEffect(() => {
-    fetchEmployees();
+    if (endpoint) {
+      fetchEndpoint();
+    }
   }, [endpoint])
 
-  async function fetchEmployees() {
-    console.log('fetching employee')
+  async function fetchEndpoint() {
     setLoading(true);
-
     try {
-      console.log('before fetch')
       const response = await fetch(endpoint);
       const data = await response.json();
       if (data) {

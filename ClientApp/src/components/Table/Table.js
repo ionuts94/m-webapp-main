@@ -1,6 +1,7 @@
 import React from 'react';
 import './Table.css';
 
+// Custom Table component
 export function Table({ children }) {
   return (
     <div className='table-container'>

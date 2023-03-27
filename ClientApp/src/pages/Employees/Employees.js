@@ -1,54 +1,70 @@
 import React from 'react';
-import { Label, Spinner, PageWrapper, AddEmployeeButton, Table, DisplayError } from 'components';
+import { Link, useNavigate } from 'react-router-dom';
 import { MdModeEditOutline } from "react-icons/md";
-import { useNavigate } from 'react-router-dom';
+import {
+  Label,
+  Table,
+  Avatar,
+  Spinner,
+  AddButton,
+  PageHeader,
+  PageWrapper,
+  DisplayError,
+} from 'components';
+import {
+  EMPLOYEES_ENDPOINT,
+  VIEW_EMPLOYEES_PAGE,
+  DEFAULT_PAGE_HEADER_COLOR,
+  DEFAULT_PAGE_HEADER_TEXT_COLOR
+} from 'constants';
 import { useFetchEndpoint } from 'hooks';
 import './Employees.css';
 
-const EMPLOYEES_ENDPOINT = 'employees';
-const DEPARTMENTS_ENDPOINT = 'departments';
-const DEFAULT_PROFILE_PICTURE = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
-
 export function Employees() {
   const navigate = useNavigate();
-  const {
-    data: departmentsData,
-    loading: departmentsLoading,
-    error: departmentsError
-  } = useFetchEndpoint(DEPARTMENTS_ENDPOINT);
+
+  // The above line is responsible for All Employees fetching
   const { data, loading, error } = useFetchEndpoint(EMPLOYEES_ENDPOINT);
 
   function editProfile(id) {
     navigate(`/profile/${id}`);
   }
 
-  function getDepartmentById(departmentId) {
-    return departmentsData.find(el => el.id === departmentId)
-  }
-
-  if (loading || departmentsLoading) {
+  // If the hook is awaing for response
+  // We show Spinner component
+  if (loading) {
     return <Spinner />
   }
 
-  if (error || departmentsError) {
+  // If the hook failed request
+  // We show DisplayError component
+  if (error) {
     return <DisplayError
-      error={error.toString() || departmentsError.toString()}
+      error={error.toString()}
       redirectTo="/"
     />
   }
 
   return (
     <section className='employees-page'>
-      <div style={{ height: '50px' }}></div>
+      <PageHeader
+        color={DEFAULT_PAGE_HEADER_COLOR}
+        textColor={DEFAULT_PAGE_HEADER_TEXT_COLOR}
+      >
+        {VIEW_EMPLOYEES_PAGE}
+      </PageHeader>
+
       <PageWrapper>
         <div className='page-header'>
           <div className='text-container'>
             <h1>Employees List</h1>
             <p>Manage all your employees</p>
           </div>
-          <AddEmployeeButton>
-            + Add Employee
-          </AddEmployeeButton>
+          <Link to="/insert-employee">
+            <AddButton>
+              + Add Employee
+            </AddButton>
+          </Link>
         </div>
 
         <Table>
@@ -71,29 +87,22 @@ export function Employees() {
                 </Table.Data>
 
                 <Table.Data>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    {/* TODO - Extract this div into its own component */}
-                    {employee.picture ||
-                      <img
-                        src={DEFAULT_PROFILE_PICTURE}
-                        alt="default-avatar"
-                        style={{ height: 40, width: 40, borderRadius: '50%' }}
-                      />
-                    }
-                    {employee.name}
-                  </div>
+                  <Avatar
+                    name={employee.name}
+                    photoUrl={employee.photo}
+                  />
                 </Table.Data>
 
                 <Table.Data hideOnMobile>
-                  {getDepartmentById(employee.department)?.name || "N/A"}
+                  {employee.department || "N/A"}
                 </Table.Data>
 
                 <Table.Data hideOnMobile>
-                  {getDepartmentById(employee.department)?.location || "N/A"}
+                  {employee.location || "N/A"}
                 </Table.Data>
 
                 <Table.Data>
-                  <Label state={employee.state || 'active'} />
+                  <Label state={employee.status || 'active'} />
                 </Table.Data>
 
                 <Table.Data>
@@ -108,7 +117,6 @@ export function Employees() {
             ))}
           </Table.Body>
         </Table>
-
 
       </PageWrapper>
     </section>

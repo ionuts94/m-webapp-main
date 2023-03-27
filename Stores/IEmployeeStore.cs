@@ -5,10 +5,9 @@ namespace InterviewTest.Stores
 {
   public interface IEmployeeStore
   {
-    public List<Employee> GetAllEmployees();
+    public List<ListEmployee> GetAllEmployees();
     public Employee GetEmployeeById(int id);
-    public void AddEmployee(Employee employee);
-    public void DeleteEmployee(int id);
-    public void UpdateEmployee(Employee employee);
+    public bool HandleEmployeeInput(Employee employee, bool isUpdating);
+    public bool DeleteEmployee(int id);
   }
 }

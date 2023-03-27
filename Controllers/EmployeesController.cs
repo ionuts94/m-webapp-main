@@ -17,7 +17,7 @@ namespace InterviewTest.Controllers
     }
 
     [HttpGet]
-    public List<Employee> Get()
+    public List<ListEmployee> Get()
     {
       return store.GetAllEmployees();
     }
@@ -33,10 +33,25 @@ namespace InterviewTest.Controllers
       return Ok(employee);
     }
 
-    [HttpDelete]
-    public void Delete([FromBody] int id)
+    [HttpPost("/add-employee")]
+    public bool AddEmployee([FromBody] Employee employee)
     {
-      store.DeleteEmployee(id);
+      var employeeAdded = store.HandleEmployeeInput(employee, false);
+      return employeeAdded;
+    }
+
+    [HttpPut("/update-employee")]
+    public bool UpdateEmployee([FromBody] Employee employee)
+    {
+      var employeeUpdated = store.HandleEmployeeInput(employee, true);
+      return employeeUpdated;
+    }
+
+    [HttpDelete("/delete-employee")]
+    public bool DeleteEmployee([FromBody] int id)
+    {
+      var done = store.DeleteEmployee(id);
+      return done;
     }
 
     // TODO: Update & Add
