@@ -36,7 +36,10 @@ export const STATES = {
   }
 }
 
-// Hooks Data
+// Messages
+export const INVALID_IMAGE_MESSAGE = 'Image url is invalid. Please use a valid one or leave it blank';
+export const REQUIRED_FORM_FIELDS = 'Fields marked with * are required';
+export const INVALID_FORM_MESSAGE = 'Please fill in all required fields before submitting the form';
 export const HANDLE_ENPLOYEE_INPUT = {
   POST: {
     success: 'Successfully added employee to database.',

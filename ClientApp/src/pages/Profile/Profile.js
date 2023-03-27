@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { imageIsValid } from 'utils';
 import {
   STATUS_ENDPOINT,
   EMPLOYEES_ENDPOINT,
@@ -9,7 +11,10 @@ import {
   EDIT_PROFILE_PAGE,
   ADD_EMPLOYEE_PAGE,
   DEFAULT_PAGE_HEADER_COLOR,
-  DEFAULT_PAGE_HEADER_TEXT_COLOR
+  DEFAULT_PAGE_HEADER_TEXT_COLOR,
+  REQUIRED_FORM_FIELDS,
+  INVALID_FORM_MESSAGE,
+  INVALID_IMAGE_MESSAGE
 } from 'constants';
 import {
   Input,
@@ -66,12 +71,23 @@ export function Profile({ actionType = 'PUT' }) {
 
   // profileData is the actuall data that will be passed
   // when calling the api
-  const [profileData, setProfileData] = useState({})
+  const [profileData, setProfileData] = useState({});
+  const [lastValidImage, setLastValidImage] = useState('');
 
   useEffect(() => {
-    if (data && !Array.isArray(data)) {
-      setProfileData(data);
+    async function prefillForm() {
+      if (data && !Array.isArray(data)) {
+        setProfileData(data);
+
+        // Saving a last version of a valid image in case there's any
+        // So we can restore to it if user enters a invalid image url
+        const validImage = await imageIsValid(data.photo);
+        if (validImage) {
+          setLastValidImage(data.photo);
+        }
+      }
     }
+    prefillForm();
   }, [data])
 
   // This is used when this component is used to add an employee
@@ -98,8 +114,34 @@ export function Profile({ actionType = 'PUT' }) {
     }))
   }
 
+  // I could have done better form validation :)
+  async function validateForm() {
+    if (!profileData.name || !profileData.department || !profileData.status) {
+      toast.error(INVALID_FORM_MESSAGE);
+      return false;
+    }
+    if (profileData.photo) {
+      const validImage = await imageIsValid(profileData.data);
+      if (!validImage) {
+        setProfileData(profileData => ({
+          ...profileData,
+          photo: lastValidImage
+        }));
+        toast.error(INVALID_IMAGE_MESSAGE)
+        return false;
+      }
+    }
+    return true;
+  }
+
   async function handleSubmitForm(e) {
     e.preventDefault();
+    const formValid = await validateForm();
+
+    if (!formValid) {
+      return
+    };
+
     const done = await handleEmployeeAction(endpoint, profileData, actionType);
     if (done && actionType === 'POST') {
       redirectToEmployeesList();
@@ -107,9 +149,15 @@ export function Profile({ actionType = 'PUT' }) {
   }
 
   async function handleDeleteEmployee(e) {
+    e.preventDefault();
+    const formValid = validateForm();
+
+    if (!formValid) {
+      return;
+    }
+
     const actionType = 'DELETE';
     const endpoint = EMPLOYEE_ACTIONS_ENDPOINTS[actionType];
-    e.preventDefault();
     const done = await handleEmployeeAction(endpoint, profileData, actionType);
     if (done) {
       redirectToEmployeesList();
@@ -218,6 +266,8 @@ export function Profile({ actionType = 'PUT' }) {
                 </option>
               ))}
             </Input>
+
+            <span>{REQUIRED_FORM_FIELDS}</span>
 
             <div className='buttons-container'>
               {actionType === 'PUT'
