@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Home, Employees, Profile, AddEmployee } from 'pages';
+import { Home, Employees, Profile, AddEmployee, Departments } from 'pages';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -13,6 +13,7 @@ export default function App() {
                     <Route path='/view-employees' element={<Employees />} />
                     <Route path='/insert-employee' element={<AddEmployee />} />
                     <Route path='/profile/:id' element={<Profile />} />
+                    <Route path='/view-departments' element={<Departments />} />
                 </Routes>
             </Router>
 

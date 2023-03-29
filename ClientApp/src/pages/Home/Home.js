@@ -18,7 +18,11 @@ export function Home() {
   const navigate = useNavigate();
 
   function goToEmployees() {
-    navigate('/view-employees')
+    navigate('/view-employees');
+  }
+
+  function goToDepartments() {
+    navigate('/view-departments');
   }
 
   function alertNotReady() {
@@ -44,7 +48,7 @@ export function Home() {
             header="View Departments"
             subHeader="TO BE CONTINUED..."
             icon={<FcDepartment />}
-            onClick={alertNotReady}
+            onClick={goToDepartments}
           />
         </div>
       </PageWrapper>

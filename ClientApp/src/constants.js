@@ -1,11 +1,14 @@
 // Endpoints
-export const EMPLOYEES_ENDPOINT = 'employees';
-export const DEPARTMENTS_ENDPOINT = 'departments';
 export const STATUS_ENDPOINT = 'statuses';
-export const EMPLOYEE_ACTIONS_ENDPOINTS = {
+export const DEPARTMENTS_ENDPOINTS = {
+  GET: 'departments',
+  GET_WITH_DATA: 'departments-with-data',
+};
+export const EMPLOYEES_ENDPOINTS = {
+  GET: 'employees',
   POST: 'add-employee',
   PUT: 'update-employee',
-  DELETE: 'delete-employee'
+  DELETE: 'delete-employee',
 }
 
 // Page Headers
@@ -14,6 +17,7 @@ export const VIEW_EMPLOYEES_PAGE = "MANAGE EMPLOYEES";
 export const EDIT_PROFILE_PAGE = "EDIT PROFILE";
 export const ADD_EMPLOYEE_PAGE = "ADD EMPLOYEE";
 export const VIEW_DEPARTMENTS_PAGE = "MANAGE DEPARTMENTS";
+export const DEPARTMENTS_PAGE = "MANAGE DEPARTMENTS";
 
 // Colors
 export const DEFAULT_PAGE_HEADER_COLOR = '#008CC9';
@@ -35,6 +39,11 @@ export const STATES = {
     borderColor: 'rgb(227, 165, 147)'
   }
 }
+export const DEPARTMENTS_COLORS = [
+  '43, 171, 77',
+  '196, 173, 55',
+  '173, 38, 38'
+]
 
 // Messages
 export const INVALID_IMAGE_MESSAGE = 'Image url is invalid. Please use a valid one or leave it blank';

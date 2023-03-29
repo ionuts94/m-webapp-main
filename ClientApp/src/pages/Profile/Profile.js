@@ -4,10 +4,9 @@ import { toast } from 'react-toastify';
 import { imageIsValid } from 'utils';
 import {
   STATUS_ENDPOINT,
-  EMPLOYEES_ENDPOINT,
-  DEPARTMENTS_ENDPOINT,
+  EMPLOYEES_ENDPOINTS,
+  DEPARTMENTS_ENDPOINTS,
   DEFAULT_PROFILE_PICTURE,
-  EMPLOYEE_ACTIONS_ENDPOINTS,
   EDIT_PROFILE_PAGE,
   ADD_EMPLOYEE_PAGE,
   DEFAULT_PAGE_HEADER_COLOR,
@@ -40,7 +39,7 @@ export function Profile({ actionType = 'PUT' }) {
 
   // This is used to differentiate the endpoint for when the form is submitted
   // Based on the action type. Current action types: POST , PUT, DELETE
-  const endpoint = EMPLOYEE_ACTIONS_ENDPOINTS[actionType];
+  const endpoint = EMPLOYEES_ENDPOINTS[actionType];
 
   // In case there's an ID passed in the route param
   // We know this is used for Edit Profile page 
@@ -49,13 +48,13 @@ export function Profile({ actionType = 'PUT' }) {
     data,
     loading,
     error
-  } = useFetchEndpoint(id && `${EMPLOYEES_ENDPOINT}/${id}` || null);
+  } = useFetchEndpoint(id && `${EMPLOYEES_ENDPOINTS.GET}/${id}` || null);
 
   const {
     data: departmentsData,
     loading: departmentsLoading,
     error: departmentsError
-  } = useFetchEndpoint(DEPARTMENTS_ENDPOINT);
+  } = useFetchEndpoint(DEPARTMENTS_ENDPOINTS.GET);
 
   const {
     data: statusData,
@@ -116,12 +115,13 @@ export function Profile({ actionType = 'PUT' }) {
 
   // I could have done better form validation :)
   async function validateForm() {
+    console.log(profileData)
     if (!profileData.name || !profileData.department || !profileData.status) {
       toast.error(INVALID_FORM_MESSAGE);
       return false;
     }
     if (profileData.photo) {
-      const validImage = await imageIsValid(profileData.data);
+      const validImage = await imageIsValid(profileData.photo);
       if (!validImage) {
         setProfileData(profileData => ({
           ...profileData,
@@ -157,7 +157,7 @@ export function Profile({ actionType = 'PUT' }) {
     }
 
     const actionType = 'DELETE';
-    const endpoint = EMPLOYEE_ACTIONS_ENDPOINTS[actionType];
+    const endpoint = EMPLOYEES_ENDPOINTS[actionType];
     const done = await handleEmployeeAction(endpoint, profileData, actionType);
     if (done) {
       redirectToEmployeesList();

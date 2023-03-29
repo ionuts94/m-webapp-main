@@ -6,6 +6,7 @@ export { Spinner } from './Spinner/Spinner';
 export { Avatar } from './Avatar/Avatar';
 export { Table } from './Table/Table';
 export { Label } from './Label/Label';
+export { Chart } from './Chart/Chart';
 export { Input } from './Input/Input';
 export { Tile } from './Tile/Tile';
 export { Back } from './Back/Back';

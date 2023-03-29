@@ -41,6 +41,34 @@ namespace InterviewTest.Stores
       return departments;
     }
 
+    public List<DepartmentWithData> GetDepartmentsWithData()
+    {
+      var departments = new List<DepartmentWithData>();
+
+      using (var connection = new SqliteConnection(connectionString))
+      {
+        connection.Open();
+
+        var queryCmd = connection.CreateCommand();
+        queryCmd.CommandText = "SELECT Departments.Id, Departments.Name, Location, COUNT(Employees.Id) AS EmployeesCount FROM Departments LEFT JOIN Employees ON Departments.Id = Employees.Department GROUP BY Departments.Id";
+        using (var reader = queryCmd.ExecuteReader())
+        {
+          while (reader.Read())
+          {
+            departments.Add(new DepartmentWithData
+            {
+              Id = reader.GetInt32(0),
+              Name = reader.GetString(1),
+              Location = reader.GetString(2),
+              EmployeesCount = reader.GetInt32(3)
+            });
+          }
+        }
+      }
+
+      return departments;
+    }
+
     public Department GetDepartment(int id)
     {
       Department department = null;

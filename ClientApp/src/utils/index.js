@@ -1,5 +1,5 @@
 export async function imageIsValid(url) {
   const res = await fetch(url);
-  const buffer = await res.blob();
-  return buffer.type.startsWith('image/')
+  const bufferRes = await res.blob();
+  return bufferRes.type.startsWith('image/')
 }

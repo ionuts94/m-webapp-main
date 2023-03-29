@@ -12,7 +12,7 @@ import {
   DisplayError,
 } from 'components';
 import {
-  EMPLOYEES_ENDPOINT,
+  EMPLOYEES_ENDPOINTS,
   VIEW_EMPLOYEES_PAGE,
   DEFAULT_PAGE_HEADER_COLOR,
   DEFAULT_PAGE_HEADER_TEXT_COLOR
@@ -24,7 +24,7 @@ export function Employees() {
   const navigate = useNavigate();
 
   // The above line is responsible for All Employees fetching
-  const { data, loading, error } = useFetchEndpoint(EMPLOYEES_ENDPOINT);
+  const { data, loading, error } = useFetchEndpoint(EMPLOYEES_ENDPOINTS.GET);
 
   function editProfile(id) {
     navigate(`/profile/${id}`);

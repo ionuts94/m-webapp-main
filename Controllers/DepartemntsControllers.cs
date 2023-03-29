@@ -22,6 +22,12 @@ namespace InterviewTest.Controllers
       return store.GetAllDepartments();
     }
 
+    [HttpGet("/departments-with-data")]
+    public List<DepartmentWithData> GetDepartments()
+    {
+      return store.GetDepartmentsWithData();
+    }
+
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
