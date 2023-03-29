@@ -39,6 +39,7 @@ export function Departments() {
       <PageHeader
         color={DEFAULT_PAGE_HEADER_COLOR}
         textColor={DEFAULT_PAGE_HEADER_TEXT_COLOR}
+        backTo='/'
       >
         {DEPARTMENTS_PAGE}
       </PageHeader>
